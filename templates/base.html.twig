@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}JobStep{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4"> 
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{{ path('home') }}">Jobstep</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+                {% if app.user and 'ROLE_ADMIN' in app.user.roles %}
+                    <li class="nav-item">
+                        <a href="{{ path('admin_demarche') }}" class="nav-link">Notre démarche</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('etapes_index') }}" class="nav-link">Les étapes</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('temoignages_index') }}" class="nav-link">Témoignages</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('faq_index') }}" class="nav-link">FAQ</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('liens_utiles') }}" class="nav-link">Liens utiles</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('contact') }}" class="nav-link">Contact</a>
+                    </li>
+                {% endif %}
+
+                {% if app.user %}
+                    <li class="nav-item text-white me-3">
+                        Utilisateur : {{ app.user.fullName }}
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{{ path('app_login') }}" class="nav-link">Connexion</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ path('user_create') }}" class="nav-link">Inscription</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    {% block body %}
+    <h1 class="mb-4">Liste des Étapes</h1>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Étape</th>
+                <th>Intitulé</th>
+                <th>Description</th>
+                <th>Ressources</th>
+                <th>Rendus</th>
+                <th>Message</th>
+                <th>Validation</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if etapes is defined and etapes|length > 0 %}
+                {% for etape in etapes %}
+                    <tr>
+                        <td>{{ etape.etape }}</td>
+                        <td>{{ etape.intitule }}</td>
+                        <td>{{ etape.description }}</td>
+                        <td>{{ etape.ressources }}</td>
+                        <td>{{ etape.rendus }}</td>
+                        <td>{{ etape.message }}</td>
+                        <td>{{ etape.validation }}</td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="7" class="text-center">Aucune étape disponible.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    {% endblock %}
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
